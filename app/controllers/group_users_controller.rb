@@ -1,8 +1,8 @@
-class UsersController < ApplicationController
+class GroupUsersController < ApplicationController
   skip_before_action :verify_authenticity_token
   def create
-    @user = User.new(user_params)
-    if @user.save
+    @groupUser = GroupUser.new(groupUser_params)
+    if @groupUser.save
       respond_to do |format|
         format.json { head :ok }
       end
@@ -14,18 +14,18 @@ class UsersController < ApplicationController
   end
 
   def get
-    @user = User.find(params[:id])
-    render json: @user
+    @groupUser = GroupUser.find(params[:id])
+    render json: @groupUser
   end
 
   def all
-    @users = User.all
-    render json: @users
+    @groupUsers = GroupUser.all
+    render json: @groupUsers
   end
 
   def update
-    @user = User.find(params[:id])
-    if @user.update(user_params)
+    @groupUser = GroupUser.find(params[:id])
+    if @groupUser.update(groupUser_params)
       respond_to do |format|
         format.json { head :ok }
       end
@@ -37,14 +37,14 @@ class UsersController < ApplicationController
   end
 
   def delete
-    User.find(params[:id]).destroy
+    GroupUser.find(params[:id]).destroy
     respond_to do |format|
       format.json { head :ok }
     end
   end
 
   private
-  def user_params
-    params.require(:user).permit(:name, :email, :phone)
+  def groupUser_params
+    params.require(:group_user).permit(:user_id, :group_id)
   end
 end
