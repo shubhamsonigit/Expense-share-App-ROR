@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_10_071921) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_10_080924) do
   create_table "audits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.integer "user_id2"
+    t.bigint "group_id", null: false
     t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id2"
+    t.index ["group_id"], name: "index_audits_on_group_id"
     t.index ["user_id"], name: "index_audits_on_user_id"
   end
 
@@ -43,6 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_10_071921) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "audits", "groups"
   add_foreign_key "audits", "users"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"

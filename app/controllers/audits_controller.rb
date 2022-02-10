@@ -14,8 +14,9 @@ class AuditsController < ApplicationController
         @audit = Audit.where(user_id:audit_params[:user_id],user_id2:groupUser.user_id).take
         @audit.amount += equalAmount
       else
-        @audit = Audit.new(user_id:audit_params[:user_id],user_id2:groupUser.user_id,amount:equalAmount)
+        @audit = Audit.new(user_id:audit_params[:user_id],user_id2:groupUser.user_id,group_id:group_id,amount:equalAmount)
       end
+
       @audit.save
     end
   end
@@ -48,6 +49,16 @@ class AuditsController < ApplicationController
     respond_to do |format|
       format.json { head :ok }
     end
+  end
+
+  def getBalanceAtUserLevel
+    user_id = params[:id]
+    render json: Audit.where(user_id:user_id).or(Audit.where(user_id2:user_id))
+  end
+
+  def getBalanceAtGroupLevel
+    group_id = params[:id]
+    render json: Audit.where(group_id:group_id)
   end
 
   private

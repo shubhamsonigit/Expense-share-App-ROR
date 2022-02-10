@@ -23,4 +23,6 @@ Rails.application.routes.draw do
   put "/groupUsers/:id", to: "group_users#update"
   delete "/groupUsers/:id", to: "group_users#delete"
 
+  get "/balanceAtUserLevel/:id", to: "audits#getBalanceAtUserLevel"
+  get "/balanceAtGroupLevel/:id", to: "audits#getBalanceAtGroupLevel"
 end
