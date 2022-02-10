@@ -25,4 +25,5 @@ Rails.application.routes.draw do
 
   get "/balanceAtUserLevel/:id", to: "audits#getBalanceAtUserLevel"
   get "/balanceAtGroupLevel/:id", to: "audits#getBalanceAtGroupLevel"
+  get "/transactionDateWiseSegregation/:id", to: "audits#getTransactionDateWise"
 end

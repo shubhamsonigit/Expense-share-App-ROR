@@ -1,64 +1,37 @@
 class AuditsController < ApplicationController
   skip_before_action :verify_authenticity_token
   def create
-    group_id = audit_params[:group_id]
-    count = GroupUser.where(group_id: group_id).count
-    equalAmount = audit_params[:amount]/count
-    GroupUser.where(group_id: group_id).each do |groupUser|
-      print(groupUser.user_id)
-      if groupUser.user_id == audit_params[:user_id]
-        next
-      end
-
-      if Audit.exists?(user_id:audit_params[:user_id],user_id2:groupUser.user_id)
-        @audit = Audit.where(user_id:audit_params[:user_id],user_id2:groupUser.user_id).take
-        @audit.amount += equalAmount
-      else
-        @audit = Audit.new(user_id:audit_params[:user_id],user_id2:groupUser.user_id,group_id:group_id,amount:equalAmount)
-      end
-
-      @audit.save
-    end
+    countOfUser = AuditServices.get_count_of_user(audit_params[:group_id])
+    distributedAmount = AuditServices.get_distributed_amount(audit_params[:amount],countOfUser)
+    AuditServices.create(audit_params,distributedAmount)
   end
 
   def get
-    @audit = Audit.find(params[:id])
-    render json: @audit
+    render json: AuditServices.get(params[:id])
   end
 
   def all
-    @audits = Audit.all
-    render json: @audits
+    render json: AuditServices.all
   end
 
   def update
-    @audit = Audit.find(params[:id])
-    if @audit.update(audit_params)
-      respond_to do |format|
-        format.json { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.json { head :Failed}
-      end
-    end
+    AuditServices.update(params[:id],audit_params)
   end
 
   def delete
-    Audit.find(params[:id]).destroy
-    respond_to do |format|
-      format.json { head :ok }
-    end
+    AuditServices.delete(params[:id])
   end
 
   def getBalanceAtUserLevel
-    user_id = params[:id]
-    render json: Audit.where(user_id:user_id).or(Audit.where(user_id2:user_id))
+    render json: AuditServices.get_balance_user_level(params[:id])
   end
 
   def getBalanceAtGroupLevel
-    group_id = params[:id]
-    render json: Audit.where(group_id:group_id)
+    render json: AuditServices.get_balance_group_level(params[:id])
+  end
+
+  def getTransactionDateWise
+    render json: AuditServices.get_transaction_date_wise(params[:id])
   end
 
   private

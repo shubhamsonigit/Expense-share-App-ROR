@@ -1,50 +1,27 @@
 class GroupUsersController < ApplicationController
   skip_before_action :verify_authenticity_token
   def create
-    @groupUser = GroupUser.new(groupUser_params)
-    if @groupUser.save
-      respond_to do |format|
-        format.json { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.json { head :Failed}
-      end
-    end
+    GroupUserServices.create(group_user_params)
   end
 
   def get
-    @groupUser = GroupUser.find(params[:id])
-    render json: @groupUser
+    render json: GroupUserServices.get(params[:id])
   end
 
   def all
-    @groupUsers = GroupUser.all
-    render json: @groupUsers
+    render json: GroupUserServices.all
   end
 
   def update
-    @groupUser = GroupUser.find(params[:id])
-    if @groupUser.update(groupUser_params)
-      respond_to do |format|
-        format.json { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.json { head :Failed}
-      end
-    end
+    GroupUserServices.update(params[:id],group_user_params)
   end
 
   def delete
-    GroupUser.find(params[:id]).destroy
-    respond_to do |format|
-      format.json { head :ok }
-    end
+    GroupUserServices.delete(params[:id])
   end
 
   private
-  def groupUser_params
+  def group_user_params
     params.require(:group_user).permit(:user_id, :group_id)
   end
 end
