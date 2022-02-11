@@ -23,15 +23,15 @@ class AuditsController < ApplicationController
   end
 
   def getBalanceAtUserLevel
-    render json: AuditServices.get_balance_user_level(params[:id])
+    render json: AuditServices.getBalanceUserLevel(params[:id])
   end
 
   def getBalanceAtGroupLevel
-    render json: AuditServices.get_balance_group_level(params[:id])
+    render json: AuditServices.getBalanceGroupLevel(params[:id])
   end
 
   def getTransactionDateWise
-    render json: AuditServices.get_transaction_date_wise(params[:id])
+    render json: AuditServices.getTransactionDateWise(params[:id])
   end
 
   private

@@ -32,23 +32,23 @@ class AuditServices
       Audit.find(id).destroy
     end
 
-    def get_count_of_user(group_id)
+    def getCountOfUser(group_id)
       return GroupUser.where(group_id: group_id).count
     end
 
-    def get_distributed_amount(amount,number)
+    def getDistributedAmount(amount,number)
       return amount/number
     end
 
-    def get_balance_user_level(user_id)
+    def getBalanceUserLevel(user_id)
       return Audit.where(user_id:user_id).or(Audit.where(user_id2:user_id))
     end
 
-    def get_balance_group_level(group_id)
+    def getBalanceGroupLevel(group_id)
       return Audit.where(group_id:group_id)
     end
 
-    def get_transaction_date_wise(group_id)
+    def getTransactionDateWise(group_id)
       return Audit.where(group_id:group_id).order(:created_at)
     end
   end
