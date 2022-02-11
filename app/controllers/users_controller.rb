@@ -1,23 +1,15 @@
 class UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
   def create
-    UserServices.create(user_params)
-  end
-
-  def get
-    render json: UserServices.get(params[:id])
+    UserServices::CreateUser.call(user_params)
   end
 
   def all
-    render json: UserServices.all
+    render json: UserServices::GetAllUser.call
   end
 
   def update
-    UserServices.update(params[:id],user_params)
-  end
-
-  def delete
-    UserServices.delete(params[:id])
+    UserServices::UpdateUser.call(params[:id],user_params)
   end
 
   private
